@@ -1,16 +1,20 @@
 import { useState } from 'react';
 
-const initialItems = [
-  { id: 1, description: 'Passports', quantity: 2, packed: false },
-  { id: 2, description: 'Socks', quantity: 12, packed: false },
-  { id: 3, description: 'Charger', quantity: 1, packed: false },
-];
 export default function App() {
+  const [items, setItems] = useState([]);
+  // const [isPacked, setIsPacked] = useState(false);
+  function handleAdd(item) {
+    setItems((items) => [...items, item]);
+  }
+  function handleDelete(id) {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAdd={handleAdd} />
+      <PackingList items={items} onDelete={handleDelete} />
       <Stats />
     </div>
   );
@@ -18,24 +22,23 @@ export default function App() {
 function Logo() {
   return <h1>🌴 Trip Tracker 💼</h1>;
 }
-function Form() {
+function Form({ onAdd }) {
   const [description, setDescription] = useState('');
   const [itemCount, setItemCount] = useState(1);
-  const newItem = {
-    id: initialItems.length + 1,
-    description,
-    quantity: itemCount,
-    packed: false,
-  };
+
   function handleSubmit(e) {
     e.preventDefault();
+    if (!description) return;
+    const newItem = {
+      id: new Date(),
+      description,
+      quantity: itemCount,
+      packed: false,
+    };
+    console.log(newItem);
+    onAdd(newItem);
     setDescription('');
     setItemCount(1);
-  }
-  function handleAdd() {
-    if (!description) return;
-    initialItems.push(newItem);
-    console.log(initialItems);
   }
 
   return (
@@ -57,28 +60,29 @@ function Form() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       ></input>
-      <button onClick={handleAdd}>Add</button>
+      <button>Add</button>
     </form>
   );
 }
-function PackingList() {
+function PackingList({ items, onDelete }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
-          <Item item={item} key={item.id} />
+        {items.map((item) => (
+          <Item item={item} onDelete={onDelete} key={item.id} />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ item }) {
+function Item({ item, onDelete }) {
   return (
     <li className={item.packed ? 'packed' : ''}>
+      <input type="checkbox" value={item.packed}></input>
       <span>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDelete(item.id)}>❌</button>
     </li>
   );
 }
