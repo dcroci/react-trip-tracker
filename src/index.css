@@ -35,6 +35,7 @@ h1 {
   word-spacing: 30px;
   letter-spacing: -5px;
   padding: 2.4rem 0;
+  width: 100%;
 }
 
 .add-form {
@@ -129,4 +130,32 @@ input[type='checkbox'] {
   text-align: center;
   font-weight: 700;
   padding: 3.2rem 0;
+}
+@media (max-width: 911px) {
+  h1 {
+    font-size: 5rem;
+  }
+  .add-form {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+  }
+  .add-form div {
+    display: flex;
+    gap: 12px;
+  }
+  h3 {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 593px) {
+  .add-form div {
+    flex-direction: column;
+  }
+  .add-form {
+    gap: 0;
+  }
 }
