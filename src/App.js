@@ -2,8 +2,6 @@ import { useState } from 'react';
 
 export default function App() {
   const [items, setItems] = useState([]);
-  const [packedItemsCount, setPackedItemsCount] = useState(0);
-  // const [isPacked, setIsPacked] = useState(false);
   function handleAdd(item) {
     setItems((items) => [...items, item]);
   }
@@ -16,12 +14,6 @@ export default function App() {
         item.id === id ? { ...item, packed: !item.packed } : item
       )
     );
-
-    setPackedItemsCount((prevPackedCount) =>
-      items.find((item) => item.id === id).packed
-        ? prevPackedCount - 1
-        : prevPackedCount + 1
-    );
   }
 
   return (
@@ -33,7 +25,7 @@ export default function App() {
         onDelete={handleDelete}
         onToggleItems={handleToggleItem}
       />
-      <Stats items={items} packedItemsCount={packedItemsCount} />
+      <Stats items={items} />
     </div>
   );
 }
@@ -113,22 +105,21 @@ function Item({ item, onDelete, onToggleItems }) {
     </li>
   );
 }
-function Stats({ items, packedItemsCount }) {
+function Stats({ items }) {
   const totalItemsCount = items.length;
-  const packedPercentage =
-    totalItemsCount > 0 ? (packedItemsCount / totalItemsCount) * 100 : 0;
+  const numPacked = items.filter((item) => item.packed).length;
+  const percentage = (numPacked / items.length) * 100;
 
   return (
     <footer className="stats">
       <em>
-        💼 You have {items.length} {items.length === 1 ? 'item' : 'items'} on
-        your list and you{' '}
-        {packedItemsCount < 1
-          ? 'have not yet packed any items '
-          : `already packed ${packedItemsCount}`}
-        {packedItemsCount > 1 ? ' items ' : ' item '}(
-        {packedPercentage.toFixed(2)}
-        %)
+        💼 You have {totalItemsCount} {totalItemsCount === 1 ? 'item' : 'items'}{' '}
+        on your list and you{' '}
+        {numPacked < 1
+          ? 'have not yet packed any '
+          : `already packed ${numPacked}`}
+        {numPacked > 1 || numPacked === 0 ? ' items ' : ' item '}(
+        {numPacked ? percentage.toFixed(2) + '%' : 0 + '%'})
       </em>
     </footer>
   );
