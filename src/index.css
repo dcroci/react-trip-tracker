@@ -46,6 +46,10 @@ h1 {
   justify-content: center;
   gap: 0.8rem;
 }
+.add-form div {
+  display: flex;
+  gap: 12px;
+}
 
 h3 {
   margin-right: 1.6rem;
@@ -146,10 +150,7 @@ em {
     align-items: center;
     justify-content: center;
   }
-  .add-form div {
-    display: flex;
-    gap: 12px;
-  }
+
   h3 {
     grid-row-start: 1;
     grid-row-end: 2;
